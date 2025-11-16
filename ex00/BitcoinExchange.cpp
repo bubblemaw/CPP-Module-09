@@ -21,8 +21,8 @@ date::date(std::string input_date)
 {
 	std::cout << "string date constructor" <<  std::endl;
 	_year = stoi(input_date.substr(0, 3));
-	_month = stoi(input_date.substr(5, 6));
-	_day = stoi(input_date.substr(8, 9));	
+	_month = stoi(input_date.substr(5, 2));
+	_day = stoi(input_date.substr(8, 2));
 }
 
 date::date(const date &obj)
@@ -80,13 +80,13 @@ int date::getday() const
 
 bool date::operator<(const date &obj) const
 {
-	if (this->getyear() < obj.getyear())
-		return true;
-	if (this->getmonth() < obj.getmonth())
-		return true;
-	if (this->getday() < obj.getday())
-		return true;
-	return false;				
+	// if (this->getyear() < obj.getyear())
+	// 	return true;
+	// if (this->getmonth() < obj.getmonth())
+	// 	return true;
+	// if (this->getday() < obj.getday())
+	// 	return true;
+	return false;
 }
 
 std::istream& operator>>(std::istream &in, date &obj)
@@ -94,8 +94,8 @@ std::istream& operator>>(std::istream &in, date &obj)
 	int year, month, day;
 	char sep1, sep2;
 
-	if (!in >> year)
-		return in;
+	// if (!in >> year)
+	// 	return in;
 	if (in >> year >> sep1 >> month >> sep2 >> day)
 	{
 		obj.setyear(year);
@@ -109,18 +109,10 @@ std::istream& operator>>(std::istream &in, date &obj)
 	return in;
 }
 
-std::ostream& operator<<(std::ostream &out, date &obj)
+std::ostream& operator<<(std::ostream &out, const date &obj)
 {
 	out << obj.getyear() << "-"	<<
  		obj.getmonth() << "-" <<
 		obj.getday() << " ";
 	return out;
 }
-
-// std::ostream& operator<<(std::ostream &out, date &obj) const
-// {
-// 	out << obj.getyear() << "-"	<<
-//  		obj.getmonth() << "-" <<
-// 		obj.getday() << " ";
-// 	return out;
-// }

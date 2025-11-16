@@ -41,9 +41,18 @@ class date
 		int getyear() const;
 		int getmonth() const;
 		int getday() const;
+
+	class FileNotOpen : public std::exception
+	{
+		public:
+			virtual const char *what() const throw()
+			{
+				return "Couldn't open the file :(\n";
+			}
+
+	};
 };
 	std::istream& operator>>(std::istream &in, date &obj);
-	std::ostream& operator<<(std::ostream &out, date &obj);
-	// std::ostream& operator<<(std::ostream &out, date &obj) const;
+	std::ostream& operator<<(std::ostream &out,const date &obj);
 
 #endif 

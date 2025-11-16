@@ -17,35 +17,37 @@ int main(int ac, char **av)
 	if (ac != 2)
 		return (0);
 	std::ifstream input(av[1]);
-	date line;
+	std::ifstream database("data.csv");
+	std::string line;
+	std::string number;
 	float value;
 	char sep;
-	std::map<date, float> input_data;
-	std::map <date, float>::iterator itr;
-	while (input >> line >> sep >> value)
+	std::map<std::string, float> input_data;
+	std::map<std::string, float> map_database;
+	while (getline(database, line, ','))
 	{
-		input_data[line] = value;
-		std::cout << "yo" << std::endl;
+		if (getline(database, number))
+			map_database[line] = stof(number);
 	}
-	std::cout << input_data.size() << std::endl;
-	for (itr = input_data.begin(); itr != input_data.end(); ++itr)
+	std::map <std::string, float>::iterator itr;
+	std::cout << "map size: " << map_database.size() << std::endl;
+	for (itr = map_database.begin(); itr != map_database.end(); ++itr)
 	{
-		std::cout << itr->second << " " << itr->second << std::endl;
+		std::cout << itr->first << ' ' << itr->second << std::endl;
 	}
-
-	// std::map<int, std::string> myMap = {{1, "one"}, {2, "two"}, {3, "three"}};
-
-	// // Get the first element
-	// auto firstElement = myMap.begin();
-
-	// // Access key and value
-	// int firstKey = firstElement->first;      // 1
-	// std::string firstValue = firstElement->second;  // "one"
-
-	// // Alternative syntax
-	// int firstKey2 = (*firstElement).first;
-	// std::string firstValue2 = (*firstElement).second;
-
+	while (getline(input, line, '|'))
+	{
+		for (itr = map_database.begin(); itr != map_database.end(); ++itr)
+		{
+			std::cout<< "line: " << line << std::endl;
+			std::cout<< "itr: " << itr->first << std::endl;			
+			if (line == itr->first)
+			{
+				std::cout << "we found an occurence" << std::endl;
+				break ;
+			}
+		}
+	}		
 
 	return (0);
 }
