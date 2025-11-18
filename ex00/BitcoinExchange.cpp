@@ -20,7 +20,7 @@ date::date()
 date::date(std::string input_date)
 {
 	// std::cout << "string date constructor" <<  std::endl;
-	_year = stoi(input_date.substr(0, 3));
+	_year = stoi(input_date.substr(0, 4));
 	_month = stoi(input_date.substr(5, 2));
 	_day = stoi(input_date.substr(8, 2));
 }
@@ -81,23 +81,23 @@ int date::getday() const
 bool valid_date(const date &obj)
 {
 	if (obj.getday() < 1 || obj.getday() > 31)
-		throw unvalid_date();
+		throw wrongformat();
 	else if (obj.getmonth() > 0 && obj.getmonth() < 8)
 	{
 		if (obj.getmonth() % 2 == 0 && obj.getday() > 30)
-			throw unvalid_date();
+			throw wrongformat();
 	}
 	else if (obj.getmonth() > 7 && obj.getmonth() < 13)
 	{
 		if (obj.getmonth() % 2 != 0 && obj.getday() > 30)
-			throw unvalid_date();
+			throw wrongformat();
 	}
 	if (obj.getmonth() < 1 || obj.getmonth() > 12)
-		throw unvalid_date();
+		throw wrongformat();
 	if (obj.getyear() < 1 || obj.getyear() > __INT_MAX__)
-		throw unvalid_date();
+		throw wrongformat();
 	if (obj.getmonth() == 2 && obj.getday() > 28)
-		throw unvalid_date();		
+		throw wrongformat();		
 	return (true);
 }
 
@@ -134,9 +134,15 @@ std::istream& operator>>(std::istream &in, date &obj)
 
 std::ostream& operator<<(std::ostream &out, const date &obj)
 {
-	out << obj.getyear() << "-"	<<
- 		obj.getmonth() << "-" <<
-		obj.getday() << " ";
+	out << obj.getyear() << "-";
+	if (obj.getmonth() < 10)
+		out << '0' << obj.getmonth() << '-';
+	else
+		out << obj.getmonth() << '-';
+	if (obj.getday() < 10)
+		out << '0' << obj.getday();
+	else
+		out << obj.getday();
 	return out;
 }
 
@@ -164,27 +170,39 @@ bool operator<(const date &ob1, const date &ob2)
 
 bool operator<=(const date &ob1, const date &ob2)
 {
+	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() == ob2.getmonth() && ob1.getday() == ob2.getday())
+		return true;		
 	if (ob1.getyear() < ob2.getyear())
 		return true;
+	else
+		return false;
 	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() < ob2.getmonth())
 		return true;
+	else 
+		return false;
 	if (ob1.getmonth() == ob2.getmonth() && ob1.getday() < ob2.getday())
 		return true;
-	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() == ob2.getmonth() && ob1.getday() == ob2.getday())
-		return true;
+	else 
+		return false;		
 	return false;
 }
 
 bool operator>=(const date &ob1, const date &ob2)
 {
+	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() == ob2.getmonth() && ob1.getday() == ob2.getday())
+		return true;		
 	if (ob1.getyear() > ob2.getyear())
 		return true;
+	else
+		return false;
 	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() > ob2.getmonth())
 		return true;
+	else 
+		return false;
 	if (ob1.getmonth() == ob2.getmonth() && ob1.getday() > ob2.getday())
 		return true;
-	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() == ob2.getmonth() && ob1.getday() == ob2.getday())
-		return true;
+	else 
+		return false;	
 	return false;
 }
 
@@ -192,7 +210,9 @@ bool operator>=(const date &ob1, const date &ob2)
 exchange::exchange()
 {
 	std::cout << "Default exchange constructor" <<  std::endl;
-	std::ifstream database("data.csv");	
+	std::ifstream database("data.csv");
+	if (!database)
+		throw FileNotOpen();
 	std::string line;
 	std::string number;	
 	while (getline(database, line, ','))
@@ -200,7 +220,6 @@ exchange::exchange()
 		if (getline(database, number))
 			map_database[line] = stof(number);
 	}
-	
 }
 
 exchange::exchange(const exchange &obj)
@@ -219,41 +238,79 @@ exchange& exchange::operator=(const exchange &obj)
 	return *this;
 }
 
+std::string extract_date(std::string line)
+{
+	int needle = line.find('|');
+	if (needle == -1)
+		throw wrongformat();		
+	line.erase(needle, line.size());	
+	return (line);
+}
+
+float extract_value(std::string line)
+{
+	int value;
+	int needle = line.find('|');
+	if (needle == -1)
+		throw wrongformat();
+	line.erase(0, needle + 1);
+	value = stof(line);
+	if (value < 0)
+		throw ex_not_positive();
+	if (value > __INT_MAX__)
+		throw ex_too_large();	
+	return (value);
+}
+
+
+
 void	exchange::calcul(std::string file_input)
 {
-	std::string line;
-	std::ifstream input(file_input);
+	std::string		line;
+	float			value;
+	std::ifstream	input(file_input);
+	date			input_temp;
+	date			data_temp;
+	std::map <std::string, float>::reverse_iterator itr;
+
 	if (!input)
-		std::cout << "could not open the file" << std::endl;
-	date input_temp;
-	date data_temp;
-	std::map <std::string, float>::reverse_iterator itr;	
-	while (getline(input, line, '|'))
 	{
-		
-		std::cout << "the line: " << line << std::endl;
+		std::cout << "Error: could not open the file." << std::endl;
+		return ;
+	}
+	std::cout << map_database.size() << std::endl;
+	while (getline(input, line))
+	{
+		// std::cout << "the line: " << line << std::endl;
 		for (itr = map_database.rbegin(); itr != map_database.rend(); ++itr)
 		{
-			input_temp = date(line);
-			data_temp = date(itr->first);
 			try
 			{
+				input_temp = date(extract_date(line));
+				data_temp = date(itr->first);
 				valid_date(input_temp);
 			}
-			catch (...)
+			catch(wrongformat &e)
 			{
-				std::cout << "caught an date exception" << std::endl;
-				getline(input, line);
+				std::cout << "Error: " << e.what() << line << std::endl;
 				break ;
-			}
+			}		
 			if (data_temp <= input_temp)
 			{
-				std::cout << "WE FOUND THE LANE" << std::endl;
-				if (getline(input, line))
+				// std::cout << "WE FOUND THE LANE" << std::endl;
+				// std::cout << data_temp << std::endl;
+				// std::cout << input_temp << std::endl;
+				try
 				{
-					std::cout << "the answer is: "<< stof(line) * itr->second << std::endl;
-					break ;
+					value = extract_value (line);
 				}
+				catch(std::exception &e)
+				{
+					std::cout << e.what() << std::endl;
+					break ;					
+				}
+				std::cout << input_temp << " => "<< value << " = " << round(value * itr->second) << std::endl;
+				break ;
 			}
 		}
 	}		
