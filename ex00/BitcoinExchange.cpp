@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 14:35:14 by maw               #+#    #+#             */
-/*   Updated: 2025/11/18 10:50:03 by maw              ###   ########.fr       */
+/*   Updated: 2025/11/18 13:30:03 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,8 @@ void	exchange::calcul(std::string file_input)
 	std::map <std::string, float>::reverse_iterator itr;	
 	while (getline(input, line, '|'))
 	{
-		std::cout << "rhe line: " << line << std::endl;
+		
+		std::cout << "the line: " << line << std::endl;
 		for (itr = map_database.rbegin(); itr != map_database.rend(); ++itr)
 		{
 			input_temp = date(line);
@@ -242,6 +243,7 @@ void	exchange::calcul(std::string file_input)
 			catch (...)
 			{
 				std::cout << "caught an date exception" << std::endl;
+				getline(input, line);
 				break ;
 			}
 			if (data_temp <= input_temp)
@@ -253,7 +255,6 @@ void	exchange::calcul(std::string file_input)
 					break ;
 				}
 			}
-			// std::cout << "looping" << std::endl;
 		}
 	}		
 	
