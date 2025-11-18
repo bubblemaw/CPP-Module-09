@@ -21,6 +21,7 @@
 # include <map>
 # include <exception>
 # include <iterator>
+# include <limits>
 
 
 class exchange

@@ -84,14 +84,21 @@ bool valid_date(const date &obj)
 		throw unvalid_date();
 	else if (obj.getmonth() > 0 && obj.getmonth() < 8)
 	{
-		if (obj.getmonth() % 2 != 0 && obj.getday() > 30)
+		if (obj.getmonth() % 2 == 0 && obj.getday() > 30)
 			throw unvalid_date();
 	}
 	else if (obj.getmonth() > 7 && obj.getmonth() < 13)
 	{
 		if (obj.getmonth() % 2 != 0 && obj.getday() > 30)
 			throw unvalid_date();
-	}	
+	}
+	if (obj.getmonth() < 1 || obj.getmonth() > 12)
+		throw unvalid_date();
+	if (obj.getyear() < 1 || obj.getyear() > __INT_MAX__)
+		throw unvalid_date();
+	if (obj.getmonth() == 2 && obj.getday() > 28)
+		throw unvalid_date();		
+	return (true);
 }
 
 // bool date::operator<(const date &obj) const
@@ -227,7 +234,16 @@ void	exchange::calcul(std::string file_input)
 		for (itr = map_database.rbegin(); itr != map_database.rend(); ++itr)
 		{
 			input_temp = date(line);
-			data_temp = date(itr->first);			
+			data_temp = date(itr->first);
+			try
+			{
+				valid_date(input_temp);
+			}
+			catch (...)
+			{
+				std::cout << "caught an date exception" << std::endl;
+				break ;
+			}
 			if (data_temp <= input_temp)
 			{
 				std::cout << "WE FOUND THE LANE" << std::endl;
