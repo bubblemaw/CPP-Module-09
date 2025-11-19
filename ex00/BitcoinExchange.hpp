@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 14:53:13 by maw               #+#    #+#             */
-/*   Updated: 2025/11/17 23:49:42 by maw              ###   ########.fr       */
+/*   Updated: 2025/11/19 22:34:20 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <iterator>
 # include <limits>
 # include <cmath>
+# include <iomanip>
 
 
 class exchange

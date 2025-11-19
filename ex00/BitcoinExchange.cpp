@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 14:35:14 by maw               #+#    #+#             */
-/*   Updated: 2025/11/18 13:30:03 by maw              ###   ########.fr       */
+/*   Updated: 2025/11/20 00:05:47 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,13 +174,9 @@ bool operator<=(const date &ob1, const date &ob2)
 		return true;		
 	if (ob1.getyear() < ob2.getyear())
 		return true;
-	else
-		return false;
 	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() < ob2.getmonth())
 		return true;
-	else 
-		return false;
-	if (ob1.getmonth() == ob2.getmonth() && ob1.getday() < ob2.getday())
+	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() == ob2.getmonth() && ob1.getday() < ob2.getday())
 		return true;
 	else 
 		return false;		
@@ -193,16 +189,12 @@ bool operator>=(const date &ob1, const date &ob2)
 		return true;		
 	if (ob1.getyear() > ob2.getyear())
 		return true;
-	else
-		return false;
 	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() > ob2.getmonth())
 		return true;
-	else 
-		return false;
-	if (ob1.getmonth() == ob2.getmonth() && ob1.getday() > ob2.getday())
+	if (ob1.getyear() == ob2.getyear() && ob1.getmonth() == ob2.getmonth() && ob1.getday() > ob2.getday())
 		return true;
 	else 
-		return false;	
+		return false;		
 	return false;
 }
 
@@ -214,7 +206,8 @@ exchange::exchange()
 	if (!database)
 		throw FileNotOpen();
 	std::string line;
-	std::string number;	
+	std::string number;
+	getline(database, line);
 	while (getline(database, line, ','))
 	{
 		if (getline(database, number))
@@ -249,7 +242,7 @@ std::string extract_date(std::string line)
 
 float extract_value(std::string line)
 {
-	int value;
+	float value;
 	int needle = line.find('|');
 	if (needle == -1)
 		throw wrongformat();
@@ -257,8 +250,8 @@ float extract_value(std::string line)
 	value = stof(line);
 	if (value < 0)
 		throw ex_not_positive();
-	if (value > __INT_MAX__)
-		throw ex_too_large();	
+	if (value > 1000)
+		throw ex_too_large();
 	return (value);
 }
 
@@ -279,6 +272,7 @@ void	exchange::calcul(std::string file_input)
 		return ;
 	}
 	std::cout << map_database.size() << std::endl;
+	getline(input, line);
 	while (getline(input, line))
 	{
 		// std::cout << "the line: " << line << std::endl;
@@ -294,12 +288,17 @@ void	exchange::calcul(std::string file_input)
 			{
 				std::cout << "Error: " << e.what() << line << std::endl;
 				break ;
-			}		
+			}
+			catch(std::exception &e)
+			{
+				std::cout << "Error: " << e.what() << std::endl;
+				break ;
+			}			
 			if (data_temp <= input_temp)
 			{
 				// std::cout << "WE FOUND THE LANE" << std::endl;
-				// std::cout << data_temp << std::endl;
-				// std::cout << input_temp << std::endl;
+				// std::cout << "database date: " << data_temp << std::endl;
+				// std::cout << "input date: " << input_temp << std::endl;
 				try
 				{
 					value = extract_value (line);
@@ -309,7 +308,7 @@ void	exchange::calcul(std::string file_input)
 					std::cout << e.what() << std::endl;
 					break ;					
 				}
-				std::cout << input_temp << " => "<< value << " = " << round(value * itr->second) << std::endl;
+				std::cout << input_temp << " => "<< value << " = " << value * itr->second << std::endl;
 				break ;
 			}
 		}
