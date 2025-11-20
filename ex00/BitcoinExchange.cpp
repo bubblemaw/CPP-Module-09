@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 14:35:14 by maw               #+#    #+#             */
-/*   Updated: 2025/11/20 00:05:47 by maw              ###   ########.fr       */
+/*   Updated: 2025/11/20 20:55:45 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,37 +101,6 @@ bool valid_date(const date &obj)
 	return (true);
 }
 
-// bool date::operator<(const date &obj) const
-// {
-// 	// if (this->getyear() < obj.getyear())
-// 	// 	return true;
-// 	// if (this->getmonth() < obj.getmonth())
-// 	// 	return true;
-// 	// if (this->getday() < obj.getday())
-// 	// 	return true;
-// 	return false;
-// }
-
-std::istream& operator>>(std::istream &in, date &obj)
-{
-	int year, month, day;
-	char sep1, sep2;
-
-	// if (!in >> year)
-	// 	return in;
-	if (in >> year >> sep1 >> month >> sep2 >> day)
-	{
-		obj.setyear(year);
-		obj.setmonth(month);
-		obj.setday(day);
-	}
-	// else if (sep1 != '-') 
-	// 	throw std::exception();
-	// else if (sep2 != '-') 
-	// 	throw std::exception();
-	return in;
-}
-
 std::ostream& operator<<(std::ostream &out, const date &obj)
 {
 	out << obj.getyear() << "-";
@@ -201,7 +170,7 @@ bool operator>=(const date &ob1, const date &ob2)
 
 exchange::exchange()
 {
-	std::cout << "Default exchange constructor" <<  std::endl;
+	// std::cout << "Default exchange constructor" <<  std::endl;
 	std::ifstream database("data.csv");
 	if (!database)
 		throw FileNotOpen();
@@ -217,17 +186,22 @@ exchange::exchange()
 
 exchange::exchange(const exchange &obj)
 {
-	std::cout << "exchange copy constructor" <<  std::endl;	
+	// std::cout << "exchange copy constructor" <<  std::endl;
+	*this = obj;
 }
 
 exchange::~exchange()
 {
-	std::cout << "exchange destructor" <<  std::endl;	
+	// std::cout << "exchange destructor" <<  std::endl;
 }
 
 exchange& exchange::operator=(const exchange &obj)
 {
-	std::cout << "exchange assignement operator" <<  std::endl;
+	// std::cout << "exchange assignement operator" <<  std::endl;
+	if (this != &obj)
+	{
+		this->map_database = obj.map_database;
+	}
 	return *this;
 }
 
@@ -248,9 +222,9 @@ float extract_value(std::string line)
 		throw wrongformat();
 	line.erase(0, needle + 1);
 	value = stof(line);
-	if (value < 0)
+	if (value <= 0)
 		throw ex_not_positive();
-	if (value > 1000)
+	if (value > 999)
 		throw ex_too_large();
 	return (value);
 }
@@ -271,7 +245,6 @@ void	exchange::calcul(std::string file_input)
 		std::cout << "Error: could not open the file." << std::endl;
 		return ;
 	}
-	std::cout << map_database.size() << std::endl;
 	getline(input, line);
 	while (getline(input, line))
 	{
@@ -291,14 +264,11 @@ void	exchange::calcul(std::string file_input)
 			}
 			catch(std::exception &e)
 			{
-				std::cout << "Error: " << e.what() << std::endl;
+				std::cout << "Error: Bad input => " << line << std::endl;
 				break ;
 			}			
 			if (data_temp <= input_temp)
 			{
-				// std::cout << "WE FOUND THE LANE" << std::endl;
-				// std::cout << "database date: " << data_temp << std::endl;
-				// std::cout << "input date: " << input_temp << std::endl;
 				try
 				{
 					value = extract_value (line);
