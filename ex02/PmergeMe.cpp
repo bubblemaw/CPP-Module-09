@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:46 by masase            #+#    #+#             */
-/*   Updated: 2025/11/30 13:55:03 by maw              ###   ########.fr       */
+/*   Updated: 2025/11/30 22:31:39 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ void PmergeMe::mergesort()
 	std::cout << "merge sort" << std::endl;
 	if (set.size() > _order * 2)
 	{
-	createpair();
-	mergesort(); // recursive after or before ?
+		createpair();
+		mergesort(); // recursive after or before ?
 	}
-	_order / 2;
+	_order =  _order / 2;
 	init();
 	// insertion();
 }
@@ -77,19 +77,19 @@ void PmergeMe::init()
 	for (int i = 0; i < set.size(); i += _order)
 	{
 		std::cout << "dans le init " << "with this order " << _order << std::endl;
-		b = set.begin() + i + (_order -1);
+		b = set.begin() + i + (_order - 1);
 		i += _order;
 		if (i + (_order -1) >= set.size()) // odd number sequence
 			break ;
 		a = set.begin() + i + (_order -1);
+		display_set();
 		std::cout << "b set " << *b << " a set " << *a << std::endl;		
-		main.insert(a - (_order - 1), _order);
-		if (i -= (_order * 2) == 0)
-			pend.insert(b - (_order - 1), _order);
+		main.insert(main.begin() , a - (_order - 1), a);
+		if (i - (_order * 2) == 0)
+			pend.insert(pend.begin() , a - (_order - 1), a);
 		else
-			main.insert(b - (_order - 1), _order);
+			pend.insert(pend.begin() , a - (_order - 1), a);
 	}
-	_order / 2;	
 	std::cout << "the main: ";
 	display_vector(main);
 	std::cout << std::endl;
