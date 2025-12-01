@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:46 by masase            #+#    #+#             */
-/*   Updated: 2025/11/30 22:31:39 by masase           ###   ########.fr       */
+/*   Updated: 2025/12/01 11:52:59 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,12 @@ void	PmergeMe::display_vector(std::vector<int> &vec)
 void PmergeMe::mergesort()
 {
 	std::cout << "merge sort" << std::endl;
-	if (set.size() > _order * 2)
+	if (set.size() < _order * 2)
 	{
-		createpair();
-		mergesort(); // recursive after or before ?
+		return ;
 	}
+	createpair();
+	mergesort(); // recursive after or before ?	
 	_order =  _order / 2;
 	init();
 	// insertion();
@@ -78,17 +79,20 @@ void PmergeMe::init()
 	{
 		std::cout << "dans le init " << "with this order " << _order << std::endl;
 		b = set.begin() + i + (_order - 1);
+		if (i - _order  == 0)
+			main.insert(main.begin() , b - (_order - 1), b + 1);
+		else
+			pend.insert(pend.begin() , b - (_order - 1), b + 1);		
+		if (i + _order >= set.size()) // odd number sequence
+			break ;		
 		i += _order;
-		if (i + (_order -1) >= set.size()) // odd number sequence
-			break ;
-		a = set.begin() + i + (_order -1);
+		a = set.begin() + i + (_order - 1);
+		if (i + _order >= set.size()) // odd number sequence
+			break ;				
 		display_set();
 		std::cout << "b set " << *b << " a set " << *a << std::endl;		
-		main.insert(main.begin() , a - (_order - 1), a);
-		if (i - (_order * 2) == 0)
-			pend.insert(pend.begin() , a - (_order - 1), a);
-		else
-			pend.insert(pend.begin() , a - (_order - 1), a);
+		main.insert(main.begin() , a - (_order - 1), a + 1);
+
 	}
 	std::cout << "the main: ";
 	display_vector(main);
@@ -96,6 +100,8 @@ void PmergeMe::init()
 	std::cout << "the pend: ";
 	display_vector(pend);
 	std::cout << std::endl;	
+	main.erase(main.begin(), main.begin() + main.size());
+	pend.erase(pend.begin(), pend.begin() + pend.size());
 }
 
 void PmergeMe::insertion()
