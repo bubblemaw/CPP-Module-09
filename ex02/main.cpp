@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:40 by masase            #+#    #+#             */
-/*   Updated: 2025/11/30 20:56:41 by masase           ###   ########.fr       */
+/*   Updated: 2025/12/01 14:57:33 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int main(int ac, char **av)
 {
 	if (ac < 2)
-		return (0);
+		return (0);	
 	std::vector<std::string> set(av + 1, av + ac);
 	std::vector<std::string>::iterator it = set.begin();
 	std::vector<int> numbers;
