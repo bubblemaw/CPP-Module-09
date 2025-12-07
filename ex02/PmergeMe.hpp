@@ -48,4 +48,17 @@ class PmergeMe
 		void swap(v_it begin1, v_it begin2, int order);
 
 };
+
+class Pair
+{
+	private:
+		int A;
+		int B;
+		int num;
+	public:
+
+};
+
+
+
 #endif

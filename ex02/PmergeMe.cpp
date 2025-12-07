@@ -170,8 +170,8 @@ void PmergeMe::insertion()
 		int j = ((pairs_main - insertion) - (pair_it_pend + insertion)) * _order;		
  		while (pair_it_main > 0 && pair_it_main <= pair_it_pend) //(pair_it < pairs_main)
 		{
-			std::cout << "insert main la paire du pend: " << pair_it_pend << std::endl;
-			std::cout << "insert main la paire du main: " << pair_it_main << std::endl;
+			std::cout << "iterator pend: " << pair_it_pend << std::endl;
+			std::cout << "iterator main: " << pair_it_main << std::endl;
 			insert_place = main.end() - (j + 1);
 			if (pair_it_main == 1) // insert a the beginnning
 			{
