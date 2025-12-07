@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:46 by masase            #+#    #+#             */
-/*   Updated: 2025/12/06 15:42:44 by maw              ###   ########.fr       */
+/*   Updated: 2025/12/07 12:56:31 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,12 +146,17 @@ void PmergeMe::insertion()
 	int pair_it_main = 0;
 	jacob = jacob_generator(n);
 	int old_jacob = 0;
-	std::cout << "insertion with the order " << _order << std::endl;	
+	std::cout << "insertion with the order " << _order << std::endl;
+	std::cout << "main before insertion" << std::endl;
+	display_vector(main);
+	std::cout << "ooend before insertion" << std::endl;
+	display_vector(pend);
 	for (int i = 0 ; i < pend.size() ; i += _order)
 	{
 		while (pair_it_pend > 0)
 		{
-			std::cout << " dans le selec la paire du pend: " << pair_it_pend << std::endl; 
+			std::cout << " dans le selec la paire du pend: " << pair_it_pend << std::endl;
+			std::cout << "i: " << i << std::endl;
 			b = pend.end() - (i + 1);
 			if (pair_it_pend <= jacob && pair_it_pend > old_jacob)
 			{
@@ -161,17 +166,30 @@ void PmergeMe::insertion()
 			i += _order;
 			pair_it_pend--;
 		}
-		pair_it_main = pair_it_pend;
-		int j = (pairs_main - pair_it_pend) * _order;		
+		pair_it_main = pair_it_pend + insertion;
+		int j = ((pairs_main - insertion) - (pair_it_pend + insertion)) * _order;		
  		while (pair_it_main > 0 && pair_it_main <= pair_it_pend) //(pair_it < pairs_main)
 		{
 			std::cout << "insert main la paire du pend: " << pair_it_pend << std::endl;
 			std::cout << "insert main la paire du main: " << pair_it_main << std::endl;
 			insert_place = main.end() - (j + 1);
-			if (*b > *insert_place)
+			if (pair_it_main == 1) // insert a the beginnning
+			{
+				main.insert(main.begin(), b - (_order - 1) , b + 1 );
+				// pairs_pend--;
+				// pairs_main++;			
+				insertion++;
+				std::cout << "main after the insert: ";
+				display_vector(main);
+				break ;
+			}
+			std::cout << *b << " du pend plus grand que " << *insert_place << " du main ?" << std::endl;
+			if (*b > *insert_place) // insert in between 
 			{
 				std::cout << "insert place " << *insert_place << std::endl;
 				main.insert(main.end() - j, b - (_order - 1) , b + 1);
+				// pairs_pend--;	
+				// pairs_main++;
 				insertion++;
 				std::cout << "main after the insert: ";
 				display_vector(main);
@@ -181,7 +199,7 @@ void PmergeMe::insertion()
 			j += _order;			
 		}
 		std::cout << "la paire du pend: " << pair_it_pend << std::endl; 
-		if (insertion >= jacob || pair_it_pend == 1)
+		if (insertion >= jacob || pair_it_pend == 2)
 		{
 			pair_it_pend = pairs_pend;
 			old_jacob = jacob;
