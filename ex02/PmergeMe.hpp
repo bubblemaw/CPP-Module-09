@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:50 by masase            #+#    #+#             */
-/*   Updated: 2025/12/01 13:45:56 by masase           ###   ########.fr       */
+/*   Updated: 2025/12/03 16:46:16 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ class PmergeMe
 		std::vector<int> jacob;
 		std::vector<int> set;
 		std::vector<int> main;
-		std::vector<int> pend;			
+		std::vector<int> pend;
+		std::vector<int> leftover;	
 	public:
 		PmergeMe(std::vector<int> &numbers);
 		PmergeMe(const PmergeMe &obj);
