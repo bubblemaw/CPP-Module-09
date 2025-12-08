@@ -18,6 +18,12 @@ PmergeMe::PmergeMe(std::vector<int> &numbers)
 	set = numbers;
 }
 
+PmergeMe::PmergeMe(pair_vec numbers)
+{
+	std::cout << "PmergeMe Default Constructor" << std::endl;
+	set2 = numbers;
+}
+
 PmergeMe::PmergeMe(const PmergeMe &obj)
 {
 	std::cout << "PmergeMe Copy Constructor" << std::endl;
@@ -62,30 +68,42 @@ void	PmergeMe::display_vector(std::vector<int> &vec)
 	std::cout << std::endl;
 }
 
+void	PmergeMe::display_vector_pair(pair_vec &vec)
+{
+	p_it it;
+	for (it = vec.begin(); it < vec.end(); ++it)
+	{
+		std::cout << it->get_number() << " ";
+	}
+	std::cout << std::endl;
+}
+
 void PmergeMe::mergesort()
 {
 	std::cout << "merge sort" << std::endl;
-	if (set.size() < _order * 2)
+	if (set2.size() < _order * 2)
 	{
+		display_vector_pair(set2);
 		return ;
 	}
-	createpair();
+	createpair_2();
 	mergesort(); // recursive after or before ?	
-	_order =  _order / 2;
-	init();
-	insertion();
-	std::cout << "NEW main: ";
-	display_vector(main);
-	std::cout << std::endl;
-	std::cout << "NEW pend: ";
-	display_vector(pend);
-	std::cout << std::endl;
-	set.erase(set.begin(), set.end());
-	set.insert(set.begin(), main.begin(), main.end());
-	set.insert(set.end(), leftover.begin(), leftover.end());
-	main.erase(main.begin(), main.begin() + main.size());
-	pend.erase(pend.begin(), pend.begin() + pend.size());
-	leftover.erase(leftover.begin(), leftover.begin() + leftover.size());
+
+	// _order =  _order / 2;
+	// init();
+	// insertion();
+	// std::cout << "NEW main: ";
+	// display_vector(main);
+	// std::cout << std::endl;
+	// std::cout << "NEW pend: ";
+	// display_vector(pend);
+	// std::cout << std::endl;
+	// set.erase(set.begin(), set.end());
+	// set.insert(set.begin(), main.begin(), main.end());
+	// set.insert(set.end(), leftover.begin(), leftover.end());
+	// main.erase(main.begin(), main.begin() + main.size());
+	// pend.erase(pend.begin(), pend.begin() + pend.size());
+	// leftover.erase(leftover.begin(), leftover.begin() + leftover.size());
 }
 
 void PmergeMe::init()
@@ -214,6 +232,35 @@ void PmergeMe::insertion()
 	set.insert(set.begin(), main.begin(), main.end());
 }
 
+void PmergeMe::createpair_2()
+{
+	std::cout << "creating pairs with the order " << _order << std::endl;	
+	p_it left_pair;
+	p_it right_pair;
+	int j = 1;
+	for (int i = 0; i < set2.size(); i += _order)
+	{
+		left_pair = set2.begin() + i + (_order -1);
+		left_pair->setB(true);
+		left_pair->setA(false);
+		left_pair->set_head(true);
+		left_pair->set_num_pair(j);
+		i += _order;
+		if (i + (_order -1) >= set2.size()) // odd number sequence
+			break ;
+		right_pair = set2.begin() + i + (_order -1);
+		right_pair->setB(false);
+		right_pair->setA(true);
+		right_pair->set_head(true);
+		right_pair->set_num_pair(j);		
+		std::cout << "left pair " << left_pair->get_number() << " right pair " << right_pair->get_number() << std::endl;		
+		if (left_pair->get_number() > right_pair->get_number())
+			swap2(left_pair, right_pair, _order);
+		j++;
+	}
+	_order = _order * 2;
+}
+
 void PmergeMe::createpair()
 {
 	// std::cout << "creating pairs with the order " << _order << std::endl;	
@@ -243,3 +290,15 @@ void PmergeMe::swap(v_it begin1, v_it begin2, int order)
 		begin2 -= 1;		
 	}
 }
+
+void PmergeMe::swap2(p_it begin1, p_it begin2, int order)
+{
+	for (int i = order; i > 0; --i)
+	{
+		std::iter_swap(begin1, begin2);
+		std::cout << "we just swapped " << begin1->get_number() << " and " << begin2->get_number() << std::endl;
+		begin1 -= 1;
+		begin2 -= 1;		
+	}
+}
+

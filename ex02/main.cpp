@@ -19,15 +19,27 @@ int main(int ac, char **av)
 	std::vector<std::string> set(av + 1, av + ac);
 	std::vector<std::string>::iterator it = set.begin();
 	std::vector<int> numbers;
+	v_it it1;
+	pair_vec numbers_2;
 	for (it = set.begin(); it < set.end(); ++it)
 	{
 		numbers.push_back(stoi(*it));
 	}
-	PmergeMe sort(numbers);
+	for (it1 = numbers.begin(); it1 < numbers.end(); ++it1)
+	{
+		numbers_2.push_back(*it1);
+	}
+	// PmergeMe sort(numbers);
+	// std::cout << "numbers before the work" << std::endl;
+	// sort.display_set();
+	// sort.mergesort();
+	// std::cout << "numbers after pairs" << std::endl;
+	// sort.display_set();
+	PmergeMe sort(numbers_2);
 	std::cout << "numbers before the work" << std::endl;
-	sort.display_set();
+	sort.display_vector_pair(numbers_2);
 	sort.mergesort();
 	std::cout << "numbers after pairs" << std::endl;
-	sort.display_set();	
+	// sort.display_vector_pair();		
 	return (0);
 }
