@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:50 by masase            #+#    #+#             */
-/*   Updated: 2025/12/03 16:46:16 by maw              ###   ########.fr       */
+/*   Updated: 2025/12/21 13:20:52 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ class PmergeMe
 		void createpair();
 		void createpair_2();		
 		void init();
+		void init_2();
 		void insertion();
+		void insertion_2();
 		void swap(v_it begin1, v_it begin2, int order);
 		void swap2(p_it begin1, p_it begin2, int order);
 };
@@ -85,8 +87,6 @@ class PmergeMe
 			bool get_head(){return(head);}		
 
 	};		
-
-
 
 
 #endif

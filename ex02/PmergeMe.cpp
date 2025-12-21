@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:46 by masase            #+#    #+#             */
-/*   Updated: 2025/12/07 12:56:31 by masase           ###   ########.fr       */
+/*   Updated: 2025/12/21 13:44:12 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,21 +89,21 @@ void PmergeMe::mergesort()
 	createpair_2();
 	mergesort(); // recursive after or before ?	
 
-	// _order =  _order / 2;
-	// init();
-	// insertion();
-	// std::cout << "NEW main: ";
-	// display_vector(main);
-	// std::cout << std::endl;
-	// std::cout << "NEW pend: ";
-	// display_vector(pend);
-	// std::cout << std::endl;
-	// set.erase(set.begin(), set.end());
-	// set.insert(set.begin(), main.begin(), main.end());
-	// set.insert(set.end(), leftover.begin(), leftover.end());
-	// main.erase(main.begin(), main.begin() + main.size());
-	// pend.erase(pend.begin(), pend.begin() + pend.size());
-	// leftover.erase(leftover.begin(), leftover.begin() + leftover.size());
+	_order =  _order / 2;
+	init_2();
+	insertion_2();
+	std::cout << "NEW main: ";
+	display_vector_pair(main2);
+	std::cout << std::endl;
+	std::cout << "NEW pend: ";
+	display_vector_pair(pend2);
+	std::cout << std::endl;
+	set2.erase(set2.begin(), set2.end());
+	set2.insert(set2.begin(), main2.begin(), main2.end());
+	set2.insert(set2.end(), leftover2.begin(), leftover2.end());
+	main2.erase(main2.begin(), main2.begin() + main2.size());
+	pend2.erase(pend2.begin(), pend2.begin() + pend2.size());
+	leftover2.erase(leftover2.begin(), leftover2.begin() + leftover2.size());
 }
 
 void PmergeMe::init()
@@ -149,6 +149,132 @@ void PmergeMe::init()
 	// std::cout << "the leftover: ";
 	// display_vector(leftover);
 	// std::cout << std::endl;
+}
+
+void PmergeMe::init_2()
+{
+	p_it b;
+	p_it a;
+	int insert_count = 0;
+	for (int i = _order; i <= set2.size(); i += _order)
+	{
+		std::cout << "the set: "; 
+		display_vector_pair(set2);
+		// std::cout << "the order is: " << _order << std::endl; 
+		b = set2.begin() + i - 1;
+		if (i == _order)
+		{
+			main2.insert(main2.begin() , b - (_order - 1), b + 1);
+			insert_count++;
+		}
+		else
+		{
+			pend2.insert(pend2.end() , b - (_order - 1), b + 1);
+			insert_count++;			
+		}
+		std::cout << i + _order << " " << set2.size() << std::endl;
+		if (i + _order >= set2.size()) // odd number sequence
+			break ;		
+		i += _order;
+		a = set2.begin() + i - 1;
+		// std::cout << "b set " << *b << " a set " << *a << std::endl;		
+		main2.insert(main2.end() , a - (_order - 1), a + 1);
+		insert_count++;
+	}
+	set2.erase(set2.begin(), set2.begin() + insert_count * _order);
+	leftover2.insert(leftover2.begin(), set2.begin(), set2.end());
+	std::cout << "the set: ";	
+	display_vector_pair(set2);
+	std::cout << "the main: ";
+	display_vector_pair(main2);
+	std::cout << std::endl;
+	std::cout << "the pend: ";
+	display_vector_pair(pend2);
+	std::cout << std::endl;
+	std::cout << "the leftover: ";
+	display_vector_pair(leftover2);
+	std::cout << std::endl;
+}
+
+void PmergeMe::insertion_2()
+{
+	p_it b;
+	p_it insert_place;
+	int insertion = 0;
+	int n = 2;
+	int jacob;
+	int pairs_pend = pend2.size() / _order + 1;
+	int pair_it_pend = pairs_pend;
+	int pairs_main = main2.size() / _order + 1;
+	int pair_it_main = 0;
+	jacob = jacob_generator(n);
+	int old_jacob = 0;
+	std::cout << "insertion with the order " << _order << std::endl;
+	std::cout << "main before insertion" << std::endl;
+	display_vector_pair(main2);
+	std::cout << "ooend before insertion" << std::endl;
+	display_vector_pair(pend2);
+	for (int i = 0 ; i < pend2.size() ; i += _order)
+	{
+		while (pair_it_pend > 0)
+		{
+			std::cout << " dans le selec la paire du pend: " << pair_it_pend << std::endl;
+			std::cout << "i: " << i << std::endl;
+			b = pend2.end() - (i + 1);
+			if (pair_it_pend <= jacob && pair_it_pend > old_jacob)
+			{
+				std::cout << "b to insert " << b->get_number() << std::endl;
+				break ;
+			}
+			i += _order;
+			pair_it_pend--;
+		}
+		pair_it_main = pair_it_pend + insertion;
+		int j = ((pairs_main - insertion) - (pair_it_pend + insertion)) * _order;		
+ 		while (pair_it_main > 0 && pair_it_main <= pair_it_pend) //(pair_it < pairs_main)
+		{
+			std::cout << "iterator pend: " << pair_it_pend << std::endl;
+			std::cout << "iterator main: " << pair_it_main << std::endl;
+			insert_place = main2.end() - (j + 1);
+			if (pair_it_main == 1) // insert a the beginnning
+			{
+				main2.insert(main2.begin(), b - (_order - 1) , b + 1 );
+				// pairs_pend--;
+				// pairs_main++;			
+				insertion++;
+				std::cout << "main after the insert: ";
+				display_vector_pair(main2);
+				break ;
+			}
+			std::cout << b->get_number() << " du pend plus grand que " << insert_place->get_number() << " du main ?" << std::endl;
+			if (b->get_number() > insert_place->get_number()) // insert in between 
+			{
+				std::cout << "insert place " << insert_place->get_number() << std::endl;
+				main2.insert(main2.end() - j, b - (_order - 1) , b + 1);
+				// pairs_pend--;	
+				// pairs_main++;
+				insertion++;
+				std::cout << "main after the insert: ";
+				display_vector_pair(main2);
+				break ;
+			}
+			pair_it_main--;
+			j += _order;			
+		}
+		std::cout << "la paire du pend: " << pair_it_pend << std::endl; 
+		if (insertion >= jacob || pair_it_pend == 1)
+		{
+			pair_it_pend = pairs_pend;
+			old_jacob = jacob;
+			n++;
+			i = 0;
+			jacob = jacob_generator(n);
+			std::cout << "NEW JACOB" << std::endl;
+		}
+		pair_it_pend--;		
+	}
+	pend2.erase(pend2.begin(), pend2.begin() + pend2.size());
+	set2.insert(set2.begin(), main2.begin(), main2.end());
 }
 
 void PmergeMe::insertion()
