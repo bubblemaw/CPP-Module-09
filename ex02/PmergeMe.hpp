@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:50 by masase            #+#    #+#             */
-/*   Updated: 2025/12/22 13:22:13 by maw              ###   ########.fr       */
+/*   Updated: 2025/12/22 19:57:46 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,6 @@ class PmergeMe
 		int _order = 1;
 		int _insertion;
 		int _jacob;
-		std::vector<int> jacob;
-		std::vector<int> set;
-		std::vector<int> main;
-		std::vector<int> pend;
-		std::vector<int> leftover;
 		pair_vec jacob2;
 		pair_vec set2;
 		pair_vec main2;
@@ -50,20 +45,17 @@ class PmergeMe
 		~PmergeMe();
 		PmergeMe& operator=(const PmergeMe &obj);
 		int	jacob_generator(int n);
-		void display_set();
 		void display_vector(std::vector<int> &vec);
 		void display_vector_pair(pair_vec&vec);
 		void display_vector_pair_spec(pair_vec&vec);
-		void reset_pair(pair_vec &vec);	
+		void reset_pair(p_it it, int j, bool A, bool B);
+		void reset_all_pair(pair_vec &vec);
 		void mergesort();
-		void createpair();
 		void createpair_2();		
-		void init();
 		void init_2();
-		void insertion();
 		void insertion_2();
-		void swap(v_it begin1, v_it begin2, int order);
 		void swap2(p_it begin1, p_it begin2, int order);
+		void update_jacob(int *old_jacob, int *jacob, int *n, int *i);
 };
 
 	class Pair
