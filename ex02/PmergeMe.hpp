@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:50 by masase            #+#    #+#             */
-/*   Updated: 2025/12/21 13:20:52 by masase           ###   ########.fr       */
+/*   Updated: 2025/12/22 13:22:13 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <iostream>
 # include <algorithm>
 # include <string>
-# include <algorithm>
 # include <cmath>
 
 class Pair;
@@ -54,6 +53,8 @@ class PmergeMe
 		void display_set();
 		void display_vector(std::vector<int> &vec);
 		void display_vector_pair(pair_vec&vec);
+		void display_vector_pair_spec(pair_vec&vec);
+		void reset_pair(pair_vec &vec);	
 		void mergesort();
 		void createpair();
 		void createpair_2();		
