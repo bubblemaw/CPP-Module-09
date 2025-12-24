@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:50 by masase            #+#    #+#             */
-/*   Updated: 2025/12/22 19:57:46 by masase           ###   ########.fr       */
+/*   Updated: 2025/12/23 08:20:00 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef pair_vec::iterator p_it;
 class PmergeMe
 {
 	private:
+		int comp = 0;
 		int _order = 1;
 		int _insertion;
 		int _jacob;
@@ -48,7 +49,7 @@ class PmergeMe
 		void display_vector(std::vector<int> &vec);
 		void display_vector_pair(pair_vec&vec);
 		void display_vector_pair_spec(pair_vec&vec);
-		void reset_pair(p_it it, int j, bool A, bool B);
+		void set_pair(p_it it, int j, bool A, bool B);
 		void reset_all_pair(pair_vec &vec);
 		void mergesort();
 		void createpair_2();		

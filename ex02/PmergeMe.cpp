@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:46 by masase            #+#    #+#             */
-/*   Updated: 2025/12/22 19:58:39 by masase           ###   ########.fr       */
+/*   Updated: 2025/12/23 14:10:50 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,19 @@ void PmergeMe::mergesort()
 	std::cout << "NEW main: ";
 	display_vector_pair(main2);
 	std::cout << std::endl;
+	std::cout << "comp number " << comp << std::endl;
 	set2.erase(set2.begin(), set2.end());
 	set2.insert(set2.begin(), main2.begin(), main2.end());
-	set2.insert(set2.end(), leftover2.begin(), leftover2.end());
-	main2.erase(main2.begin(), main2.begin() + main2.size());
-	pend2.erase(pend2.begin(), pend2.begin() + pend2.size());
-	leftover2.erase(leftover2.begin(), leftover2.begin() + leftover2.size());
+	if (leftover2.empty() != 1)
+	{
+		set2.insert(set2.end(), leftover2.begin(), leftover2.end());
+		leftover2.erase(leftover2.begin(), leftover2.end());		
+	}
+	main2.erase(main2.begin(), main2.end());
+	pend2.erase(pend2.begin(), pend2.end());
 }
 
-void PmergeMe::reset_pair(p_it it, int j, bool A, bool B)
+void PmergeMe::set_pair(p_it it, int j, bool A, bool B)
 {
 	it->set_head(true);
 	it->set_num_pair(j);
@@ -128,43 +132,31 @@ void PmergeMe::init_2()
 		b = set2.begin() + i - 1;
 		if (i == _order)
 		{
-			reset_pair(b, j, false, true);
-			// b->set_head(true);
-			// b->set_num_pair(j);
-			// b->setB(true);
-			// b->setA(false);
+			set_pair(b, j, false, true);
 			main2.insert(main2.begin() , b - (_order - 1), b + 1);
 			insert_count++;
 		}
 		else
 		{
-			reset_pair(b, j, false, true);			
-			// b->set_head(true);
-			// b->set_num_pair(j);
-			// b->setB(true);
-			// b->setA(false);			
+			set_pair(b, j, false, true);				
 			pend2.insert(pend2.end() , b - (_order - 1), b + 1);
 			insert_count++;			
 		}
-		if (i + _order >= set2.size() && _order > 1) // odd number sequence
+		if (i + _order > set2.size()) // odd number sequence
 			break ;
 		i += _order;
 		a = set2.begin() + i - 1;
-			reset_pair(b, j, false, true);		
-		// a->set_head(true);
-		// a->set_num_pair(j);
-		// a->setB(true);
-		// a->setA(false);				
+		set_pair(b, j, false, true);			
 		main2.insert(main2.end() , a - (_order - 1), a + 1);
 		insert_count++;
 		j++;
 	}
-	std::cout << "about to insert the thing" << std::endl; 
 	set2.erase(set2.begin(), set2.begin() + insert_count * _order);
+	leftover2.insert(leftover2.begin(), set2.begin(), set2.end());	
 	std::cout << "the set: ";	
 	display_vector_pair(set2);	
 	// if (set2.empty() != 1)
-		leftover2.insert(leftover2.begin(), set2.begin(), set2.end()); // work to be done here
+
 
 	// std::cout << "the main: ";
 	// display_vector_pair(main2);
@@ -193,7 +185,7 @@ void PmergeMe::insertion_2()
 	std::cout << "insertion with the order " << _order << std::endl;
 	std::cout << "main before insertion" << std::endl;
 	display_vector_pair(main2);
-	std::cout << "ooend before insertion" << std::endl;
+	std::cout << "pend before insertion" << std::endl;
 	display_vector_pair(pend2);
 	int i = 0;
 	while (pend2.empty() == 0)
@@ -243,6 +235,7 @@ void PmergeMe::insertion_2()
 				display_vector_pair(pend2);					
 				break ;
 			}
+			comp++;
 			std::cout << b->get_number() << " du pend plus grand que " << insert_place->get_number() << " du main ?" << std::endl;			
 			j += _order;
 			insert_place = main2.end() - (j + 1);					
@@ -271,18 +264,12 @@ void PmergeMe::createpair_2()
 	for (int i = 0; i < set2.size(); i += _order)
 	{
 		left_pair = set2.begin() + i + (_order -1);
-		left_pair->setB(true);
-		left_pair->setA(false);
-		left_pair->set_head(true);
-		left_pair->set_num_pair(j);
+		set_pair(left_pair, j, false, true);
 		i += _order;
 		if (i + (_order -1) >= set2.size()) // odd number sequence
 			break ;
 		right_pair = set2.begin() + i + (_order -1);
-		right_pair->setB(false);
-		right_pair->setA(true);
-		right_pair->set_head(true);
-		right_pair->set_num_pair(j);		
+		set_pair(right_pair, j, true, false);				
 		std::cout << "left pair " << left_pair->get_number() << " right pair " << right_pair->get_number() << std::endl;		
 		if (left_pair->get_number() > right_pair->get_number())
 			swap2(left_pair, right_pair, _order);
