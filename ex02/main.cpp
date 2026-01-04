@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:40 by masase            #+#    #+#             */
-/*   Updated: 2025/12/01 14:57:33 by masase           ###   ########.fr       */
+/*   Updated: 2026/01/03 10:41:50 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,15 @@ int main(int ac, char **av)
 	{
 		numbers_2.push_back(*it1);
 	}
-	// PmergeMe sort(numbers);
+	merge sort(numbers);
 	// std::cout << "numbers before the work" << std::endl;
-	// sort.display_set();
+	sort.mergesort();
+	// std::cout << "numbers after pairs" << std::endl;
+	// PmergeMe sort(numbers_2);
+	// std::cout << "numbers before the work" << std::endl;
+	// sort.display_vector_pair(numbers_2);
 	// sort.mergesort();
 	// std::cout << "numbers after pairs" << std::endl;
-	// sort.display_set();
-	PmergeMe sort(numbers_2);
-	std::cout << "numbers before the work" << std::endl;
-	sort.display_vector_pair(numbers_2);
-	sort.mergesort();
-	std::cout << "numbers after pairs" << std::endl;
 	// sort.display_vector_pair();		
 	return (0);
 }

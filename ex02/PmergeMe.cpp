@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 14:11:46 by masase            #+#    #+#             */
-/*   Updated: 2025/12/23 14:10:50 by maw              ###   ########.fr       */
+/*   Updated: 2026/01/03 10:42:38 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	PmergeMe::display_vector_pair_spec(pair_vec &vec)
 			std::cout << it->get_number() << "*" << it->get_num_pair() << "*" << " ";
 		else
 			std::cout << it->get_number() << " ";
-
 	}
 	std::cout << std::endl;
 }
@@ -112,7 +111,7 @@ void PmergeMe::mergesort()
 	pend2.erase(pend2.begin(), pend2.end());
 }
 
-void PmergeMe::set_pair(p_it it, int j, bool A, bool B)
+void PmergeMe::set_pair(p_it &it, int j, bool A, bool B)
 {
 	it->set_head(true);
 	it->set_num_pair(j);
@@ -146,7 +145,7 @@ void PmergeMe::init_2()
 			break ;
 		i += _order;
 		a = set2.begin() + i - 1;
-		set_pair(b, j, false, true);			
+		set_pair(a, j, false, true);			
 		main2.insert(main2.end() , a - (_order - 1), a + 1);
 		insert_count++;
 		j++;
@@ -190,56 +189,11 @@ void PmergeMe::insertion_2()
 	int i = 0;
 	while (pend2.empty() == 0)
 	{
-		i = 0;
-		b = pend2.end() - (i + 1);
-		while (b->get_num_pair() > jacob)
-		{
-			b = pend2.end() - (i + 1);
-			if (b->get_num_pair() == 0)
-			{
-				update_jacob(&old_jacob, &jacob, &n, &i);		
-			}
-			std::cout << "pend num pair: " << b->get_num_pair() << " number: " << b->get_number() << std::endl;			
-			i += _order;
-		}
+		select_correct_pair_pend(b, &jacob, &old_jacob, &n, &i);
 		std::cout << "b to insert " << b->get_number() << std::endl;		
 		int j = 0;
-		insert_place = main2.end() - (j + 1);	
-		while (insert_place->get_num_pair() >= b->get_num_pair() && j < main2.size() && b->get_num_pair() != 0)
-		{
-			j += _order;
-			insert_place = main2.end() - (j + 1);
-			std::cout << "pend num pair: " << b->get_num_pair() << " main: " << insert_place->get_num_pair() << std::endl;					
-		}					
- 		while (1 && b->get_num_pair() != 0) //(pair_it < pairs_main)
-		{
-			if (b->get_number() > insert_place->get_number())
-			{
-				std::cout << "insert place " << insert_place->get_number() << std::endl;
-				main2.insert(main2.end() - j, b - (_order - 1) , b + 1);
-				pend2.erase(b - (_order - 1),  b + 1);
-				insertion++;
-				std::cout << "main after the insert: ";
-				display_vector_pair(main2);
-				std::cout << "penf after the insert: ";
-				display_vector_pair(pend2);				
-				break ;
-			}
-			else if (j + _order > main2.size())
-			{
-				main2.insert(main2.begin(), b - (_order - 1) , b + 1);
-				pend2.erase(b - (_order - 1),  b + 1);
-				std::cout << "main after the insert: ";
-				display_vector_pair(main2);
-				std::cout << "penf after the insert: ";
-				display_vector_pair(pend2);					
-				break ;
-			}
-			comp++;
-			std::cout << b->get_number() << " du pend plus grand que " << insert_place->get_number() << " du main ?" << std::endl;			
-			j += _order;
-			insert_place = main2.end() - (j + 1);					
-		} 
+		skip_unneccessary_pairs(insert_place, b, &j);
+		insert_right_place(b, insert_place, &j, &insertion);
 		if (insertion >= jacob)
 			update_jacob(&old_jacob, &jacob, &n, &i);
 	}
@@ -252,7 +206,7 @@ void PmergeMe::update_jacob(int *old_jacob, int *jacob, int *n, int *i)
 	*n++;
 	*i = 0;
 	*jacob = jacob_generator(*n);
-	// std::cout << "NEW JACOB" << std::endl;
+	std::cout << "NEW JACOB" << std::endl;
 }
 
 void PmergeMe::createpair_2()
@@ -300,4 +254,73 @@ void PmergeMe::reset_all_pair(pair_vec &vec)
 		it->set_num_pair(0);
 	}
 }
+void PmergeMe::insert_number(p_it &insert_place, p_it &b, int j, int *insertion)
+{
+	std::cout << "insert place " << insert_place->get_number() << std::endl;
+	main2.insert(main2.end() - j, b - (_order - 1) , b + 1);
+	pend2.erase(b - (_order - 1),  b + 1);
+	*insertion++;
+	std::cout << "main after the insert: ";
+	display_vector_pair(main2);
+	std::cout << "pend after the insert: ";
+	display_vector_pair(pend2);	
+}
 
+void PmergeMe::insert_number_at_the_beginning(p_it &insert_place, p_it &b, int j, int *insertion)
+{
+	main2.insert(main2.begin(), b - (_order - 1) , b + 1);
+	pend2.erase(b - (_order - 1),  b + 1);
+	*insertion++;
+	std::cout << "main after the insert: ";
+	display_vector_pair(main2);
+	std::cout << "penf after the insert: ";
+	display_vector_pair(pend2);
+}
+
+void PmergeMe::skip_unneccessary_pairs(p_it &insert_place, p_it &b, int *j)
+{
+	insert_place = main2.end() - (*j + 1);
+	while (insert_place->get_num_pair() >= b->get_num_pair() && *j < main2.size() && b->get_num_pair() != 0)
+	{
+		std::cout << "pend pair: " << b->get_num_pair() << " main pair: " << insert_place->get_num_pair() << std::endl;				
+		*j += _order;
+		insert_place = main2.end() - (*j + 1);
+	}		
+}
+
+void PmergeMe::select_correct_pair_pend(p_it &b, int *jacob, int *old_jacob, int *n, int *i)
+{
+	*i = 0;
+	b = pend2.end() - (*i + 1);
+	while (b->get_num_pair() > *jacob)
+	{
+		b = pend2.end() - (*i + 1);
+		if (b->get_num_pair() == 0)
+		{
+			update_jacob(old_jacob, jacob, n, i);		
+		}
+		std::cout << "pend num pair: " << b->get_num_pair() << " number: " << b->get_number() << std::endl;			
+		*i += _order;
+	}	
+}
+
+void PmergeMe::insert_right_place(p_it &b, p_it &insert_place, int *j, int *insertion)
+{
+	while (1 && b->get_num_pair() != 0) //(pair_it < pairs_main)
+	{
+		if (b->get_number() > insert_place->get_number())
+		{
+			insert_number(insert_place, b, *j, insertion);	
+			break ;
+		}
+		else if (*j + _order > main2.size()) // mettre la paire en tout premier (plus petit que tout le main)
+		{
+			insert_number_at_the_beginning(insert_place, b, *j, insertion);				
+			break ;
+		}
+		comp++;
+		std::cout << b->get_number() << " du pend plus grand que " << insert_place->get_number() << " du main ?" << " main pair: "<< insert_place->get_num_pair() << std::endl;			
+		*j += _order;
+		insert_place = main2.end() - (*j + 1);					
+	} 
+}

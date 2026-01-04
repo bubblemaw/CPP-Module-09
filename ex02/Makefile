@@ -3,6 +3,7 @@ NAME = PmergeMe
 
 SRCS = main.cpp \
 		PmergeMe.cpp \
+		merge.cpp \
 
 OBJS = $(SRCS:%.cpp=%.o)
 
