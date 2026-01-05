@@ -31,7 +31,7 @@ int main(int ac, char **av)
 	}
 	merge sort(numbers);
 	// std::cout << "numbers before the work" << std::endl;
-	sort.mergesort();
+	sort.mergesort(numbers);
 	// std::cout << "numbers after pairs" << std::endl;
 	// PmergeMe sort(numbers_2);
 	// std::cout << "numbers before the work" << std::endl;
