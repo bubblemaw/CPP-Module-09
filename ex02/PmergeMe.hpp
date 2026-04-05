@@ -51,7 +51,6 @@ void PmergeMe::mergesort(T &vec, int order)
 {
 	typedef typename T::iterator Iterator;
 
-	// std::cout << "merge sort" << std::endl;
 	if (vec.size() < order * 2)
 	{
 		// display_vector(vec);
@@ -90,9 +89,16 @@ void PmergeMe::mergesort(T &vec, int order)
 
 	// std::cout << "* Display of the dispatching with a order of " << order << " *"<< std::endl;
 	// if (main.empty() == 0)
+	// {
+	// 	std::cout << "main: ";
 	// 	display_vector_iterator(main);
-	// if (pend.empty() == 0)		
+	// }
+	// if (pend.empty() == 0)
+	// {
+	// 	std::cout << "pend: ";		
 	// 	display_vector_iterator(pend);
+	// }	
+
 	int n = 2;
 	int prev_jacob = jacob_generator(1);
 	int insertion = 0;
@@ -147,7 +153,7 @@ void PmergeMe::mergesort(T &vec, int order)
 		typename std::vector<Iterator>::iterator main_limit;	
 		
 		pend_it = pend.begin() + (pend.size() - 1);
-		main_limit = main.begin() + (main.size() - pend.size());
+		main_limit = main.begin() + (main.size() - pend.size() + is_odd);
 		main_insert_place = std::upper_bound(main.begin(), main_limit, *pend_it, comparaison<Iterator>);	
 		main.insert(main_insert_place, *pend_it);
 		pend.erase(pend_it);
@@ -155,9 +161,15 @@ void PmergeMe::mergesort(T &vec, int order)
 
 	// std::cout << "* Display after insertion with a order of " << order << " *"<< std::endl;
 	// if (main.empty() == 0)
+	// {
+	// 	std::cout << "main: ";		
 	// 	display_vector_iterator(main);
-	// if (pend.empty() == 0)		
+	// }
+	// if (pend.empty() == 0)
+	// {
+	// 	std::cout << "pend: ";			
 	// 	display_vector_iterator(pend);
+	// }	
 	// copie des pairs entiere dans nouvelle chaine
 	T copy;
 	typename std::vector<Iterator>::iterator it;
